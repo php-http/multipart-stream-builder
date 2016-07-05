@@ -4,7 +4,7 @@
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 [![Total Downloads](https://img.shields.io/packagist/dt/php-http/multipart-stream-builder.svg?style=flat-square)](https://packagist.org/packages/php-http/multipart-stream-builder)
 
-**Factory interfaces for PSR-7 HTTP Message.**
+**A builder for Multipart PSR-7 Streams.**
 
 
 ## Install
@@ -21,8 +21,8 @@ $ composer require php-http/multipart-stream-builder
 $builder = new MultipartStreamBuilder();
 $builder
   ->addResource('foo', $stream)
-  ->addResource('bar', fopen($filePath, 'r'), ['filename'=>'bar.png'])
-  ->addResource('foo', 'string', ['headers'=>['Content-Type'=>'text/plain']]);
+  ->addResource('bar', fopen($filePath, 'r'), ['filename' => 'bar.png'])
+  ->addResource('baz', 'string', ['headers' => ['Content-Type' => 'text/plain']]);
 
 $multipartStream = $builder->build();
 $boundary = $builder->getBoundary();
@@ -30,7 +30,7 @@ $boundary = $builder->getBoundary();
 $request = MessageFactoryDiscovery::find()->createRequest(
   'POST',
   'http://example.com',
-  ['Content-Type'=>'multipart/form-data; boundary='.$boundary],
+  ['Content-Type' => 'multipart/form-data; boundary='.$boundary],
   $multipartStream
 );
 $response = HttpClientDiscovery::find()->sendRequest($request);
@@ -38,7 +38,7 @@ $response = HttpClientDiscovery::find()->sendRequest($request);
 
 ## Documentation
 
-Please see the [official documentation](http://php-http.readthedocs.org/en/latest/message-factory/).
+Please see the [official documentation](http://php-http.readthedocs.org/en/latest/multipart-stream-builder/).
 
 
 ## Contributing
