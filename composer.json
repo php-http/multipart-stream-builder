@@ -1,0 +1,32 @@
+{
+    "name": "php-http/multipart-stream-builder",
+    "description": "A builder class that help you create a multipart stream",
+    "license": "MIT",
+    "keywords": ["http", "factory", "message", "stream"],
+    "homepage": "http://php-http.org",
+    "authors": [
+        {
+            "name": "Tobias Nyholm",
+            "email": "tobias.nyholm@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^5.5|^7.0",
+        "php-http/message-factory": "^1.0",
+        "php-http/discovery": "^0.9"
+    },
+    "suggest": {
+        "guzzlehttp/psr7":"To build the stream",
+        "zendframework/zend-diactoros":"To build the stream"
+    }
+    "autoload": {
+        "psr-4": {
+            "Http\\Message\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.2-dev"
+        }
+    }
+}

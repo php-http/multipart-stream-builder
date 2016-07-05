@@ -1,15 +1,19 @@
 <?php
 
-namespace Http\MultipartStream;
+namespace Http\Message;
 
+use GuzzleHttp\Psr7\AppendStream;
 use Http\Discovery\StreamFactoryDiscovery;
 use Http\Message\StreamFactory;
 use Psr\Http\Message\StreamInterface;
+use Zend\Diactoros\CallbackStream;
 
 /**
- * Build your own Multipart stream
+ * Build your own Multipart stream. A Multipart stream is a collection of streams separated with a $bounary. This
+ * class helps you to create a Multipart stream with stream implementations from Guzzle or Zend.
  *
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
+ * @author mtdowling and contributors to guzzlehttp/psr7
  */
 class MultipartStreamBuilder
 {
@@ -46,33 +50,34 @@ class MultipartStreamBuilder
      * }
      */
     public function addResource($name, $resource, array $options)
-    {
+    {        
         if (!$resource instanceof StreamInterface) {
             $resource = $this->streamFactory->createStream($resource);
         }
+        
+        // validate options
+        if (!isset($options['headers'])) {
+            $options['headers'] = [];
+        }
 
-        // TODO validate options
-
+        // Try to add filename if it is missing
+        if (empty($options['filename'])) {
+            $options['filename'] = null;
+            $uri = $resource->getMetadata('uri');
+            if (substr($uri, 0, 6) !== 'php://') {
+                $config['filename'] = $uri;
+            }
+        }
 
         $this->prepareHaeders($name, $resource, $options['filename'], $options['headers']);
         $this->data[$name] = ['contents' => $resource, 'headers' => $options['headers'], 'filename' => $options['filename']];
     }
 
     /**
-     * Get the headers needed before transferring the content of a POST file.
-     */
-    private function getHeaders(array $headers)
-    {
-        $str = '';
-        foreach ($headers as $key => $value) {
-            $str .= "{$key}: {$value}\r\n";
-        }
-
-        return $str;
-    }
-
-    /**
      * Build the stream.
+     *
+     * @return StreamInterface
+     * @throws \Exception
      */
     public function build()
     {
@@ -90,6 +95,22 @@ class MultipartStreamBuilder
 
         // append end
         $streams[] = $this->streamFactory->createStream("--{$this->getBoundary()}--\r\n");
+
+        if (class_exists(AppendStream::class)) {
+            return new AppendStream($streams);
+        } elseif (class_exists(CallbackStream::class)) {
+            return new CallbackStream(function() use ($streams) {
+                $content = '';
+                /** @var StreamInterface $stream */
+                foreach ($streams as $stream) {
+                    $content .= $stream->__toString();
+                }
+
+                return $content;
+            });
+        }
+
+        throw new \Exception('You need to install guzzlehttp/psr7 or zendframework/zend-diactoros to build a MultipartStream.');
     }
 
     /**
@@ -127,6 +148,19 @@ class MultipartStreamBuilder
                 $headers['Content-Type'] = $type;
             }
         }
+    }
+
+    /**
+     * Get the headers needed before transferring the content of a POST file.
+     */
+    private function getHeaders(array $headers)
+    {
+        $str = '';
+        foreach ($headers as $key => $value) {
+            $str .= "{$key}: {$value}\r\n";
+        }
+
+        return $str;
     }
 
     /**

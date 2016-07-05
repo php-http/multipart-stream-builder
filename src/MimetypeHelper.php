@@ -1,9 +1,13 @@
 <?php
 
-namespace Http\MultipartStream;
+namespace Http\Message;
 
 /**
+ * This class helps to find the proper mime types. The source of this file is taken
+ * from Guzzle.
+ *
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
+ * @author mtdowling and contributors to guzzlehttp/psr7
  */
 class MimetypeHelper
 {
