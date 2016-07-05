@@ -41,8 +41,11 @@ class MultipartStreamBuilder
     }
 
     /**
+     * Add a resource to the Multipart Stream. If the same $name is used twice the first resource will
+     * be overwritten.
+     *
      * @param string $name the formpost name
-     * @param StreamInterface|resource $resource
+     * @param string|resource|StreamInterface $resource
      * @param array $options         {
      *
      *     @var array $headers additional headers ['header-name' => 'header-value']
@@ -50,12 +53,10 @@ class MultipartStreamBuilder
      * }
      */
     public function addResource($name, $resource, array $options)
-    {        
-        if (!$resource instanceof StreamInterface) {
-            $resource = $this->streamFactory->createStream($resource);
-        }
+    {
+        $stream = $this->streamFactory->createStream($resource);
         
-        // validate options
+        // validate options['headers'] exists
         if (!isset($options['headers'])) {
             $options['headers'] = [];
         }
@@ -63,14 +64,14 @@ class MultipartStreamBuilder
         // Try to add filename if it is missing
         if (empty($options['filename'])) {
             $options['filename'] = null;
-            $uri = $resource->getMetadata('uri');
+            $uri = $stream->getMetadata('uri');
             if (substr($uri, 0, 6) !== 'php://') {
                 $config['filename'] = $uri;
             }
         }
 
-        $this->prepareHaeders($name, $resource, $options['filename'], $options['headers']);
-        $this->data[$name] = ['contents' => $resource, 'headers' => $options['headers'], 'filename' => $options['filename']];
+        $this->prepareHaeders($name, $stream, $options['filename'], $options['headers']);
+        $this->data[$name] = ['contents' => $stream, 'headers' => $options['headers'], 'filename' => $options['filename']];
     }
 
     /**
