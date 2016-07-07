@@ -91,7 +91,7 @@ class MultipartStreamBuilder
             );
 
             $streams[] = $data['contents'];
-            $streams[] .= $this->streamFactory->createStream('\r\n');
+            $streams[] .= $this->streamFactory->createStream("\r\n");
         }
 
         // append end
