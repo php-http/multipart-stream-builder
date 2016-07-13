@@ -12,8 +12,8 @@ use Zend\Diactoros\CallbackStream;
  * Build your own Multipart stream. A Multipart stream is a collection of streams separated with a $bounary. This
  * class helps you to create a Multipart stream with stream implementations from Guzzle or Zend.
  *
+ * @author Michael Dowling and contributors to guzzlehttp/psr7
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
- * @author mtdowling and contributors to guzzlehttp/psr7
  */
 class MultipartStreamBuilder
 {
@@ -70,7 +70,6 @@ class MultipartStreamBuilder
             }
         }
 
-        $this->prepareHaeders($name, $stream, $options['filename'], $options['headers']);
         $this->data[$name] = ['contents' => $stream, 'headers' => $options['headers'], 'filename' => $options['filename']];
     }
 
@@ -83,7 +82,9 @@ class MultipartStreamBuilder
     public function build()
     {
         $streams = [];
-        foreach ($this->data as $data) {
+        foreach ($this->data as $name => $data) {
+            $this->prepareHeaders($name, $data['contents'], $data['filename'], $data['headers']);
+            
             // Add start and headers
             $streams[] = $this->streamFactory->createStream(
                 "--{$this->getBoundary()}\r\n".
@@ -97,21 +98,7 @@ class MultipartStreamBuilder
         // append end
         $streams[] = $this->streamFactory->createStream("--{$this->getBoundary()}--\r\n");
 
-        if (class_exists(AppendStream::class)) {
-            return new AppendStream($streams);
-        } elseif (class_exists(CallbackStream::class)) {
-            return new CallbackStream(function() use ($streams) {
-                $content = '';
-                /** @var StreamInterface $stream */
-                foreach ($streams as $stream) {
-                    $content .= $stream->__toString();
-                }
-
-                return $content;
-            });
-        }
-
-        throw new \Exception('You need to install guzzlehttp/psr7 or zendframework/zend-diactoros to build a MultipartStream.');
+        return new MultipartStream($streams, $this->getBoundary());
     }
 
     /**
@@ -122,7 +109,7 @@ class MultipartStreamBuilder
      * @param string $filename
      * @param array &$headers
      */
-    private function prepareHaeders($name, StreamInterface $stream, $filename, array &$headers)
+    private function prepareHeaders($name, StreamInterface $stream, $filename, array &$headers)
     {
         // Set a default content-disposition header if one was no provided
         $disposition = $this->getHeader($headers, 'content-disposition');
@@ -187,7 +174,7 @@ class MultipartStreamBuilder
     /**
      * @return string
      */
-    public function getBoundary()
+    private function getBoundary()
     {
         if ($this->boundary === null) {
             $this->boundary = uniqid();
