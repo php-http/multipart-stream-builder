@@ -51,6 +51,8 @@ class MultipartStreamBuilder
      *     @var array $headers additional headers ['header-name' => 'header-value']
      *     @var string $filename
      * }
+     * 
+     * @return MultipartStreamBuilder
      */
     public function addResource($name, $resource, array $options)
     {
@@ -71,6 +73,8 @@ class MultipartStreamBuilder
         }
 
         $this->data[$name] = ['contents' => $stream, 'headers' => $options['headers'], 'filename' => $options['filename']];
+        
+        return $this;
     }
 
     /**
@@ -92,7 +96,7 @@ class MultipartStreamBuilder
             );
 
             $streams[] = $data['contents'];
-            $streams[] .= $this->streamFactory->createStream('\r\n');
+            $streams[] .= $this->streamFactory->createStream("\r\n");
         }
 
         // append end
