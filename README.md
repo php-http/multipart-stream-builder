@@ -25,7 +25,7 @@ $builder
   ->addResource('baz', 'string', ['headers' => ['Content-Type' => 'text/plain']]);
 
 $multipartStream = $builder->build();
-$boundary = $multipartStream->getBoundary();
+$boundary = $builder->getBoundary();
 
 $request = MessageFactoryDiscovery::find()->createRequest(
   'POST',
