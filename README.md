@@ -4,7 +4,7 @@
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 [![Total Downloads](https://img.shields.io/packagist/dt/php-http/multipart-stream-builder.svg?style=flat-square)](https://packagist.org/packages/php-http/multipart-stream-builder)
 
-**A builder for Multipart PSR-7 Streams.**
+**A builder for Multipart PSR-7 Streams. The builder create streams independenly form any PSR-7 implementation.**
 
 
 ## Install
