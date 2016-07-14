@@ -10,7 +10,7 @@ use Zend\Diactoros\CallbackStream;
 
 /**
  * Build your own Multipart stream. A Multipart stream is a collection of streams separated with a $bounary. This
- * class helps you to create a Multipart stream with stream implementations from Guzzle or Zend.
+ * class helps you to create a Multipart stream with stream implementations from any PSR7 library.
  *
  * @author Michael Dowling and contributors to guzzlehttp/psr7
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
@@ -142,7 +142,11 @@ class MultipartStreamBuilder
     }
 
     /**
-     * Get the headers needed before transferring the content of a POST file.
+     * Get the headers formatted for the HTTP message.
+     *
+     * @param array $headers
+     *
+     * @return string
      */
     private function getHeaders(array $headers)
     {
@@ -158,9 +162,9 @@ class MultipartStreamBuilder
      * Get one header by its name.
      *
      * @param array $headers
-     * @param $key
+     * @param string $key case insensitive
      *
-     * @return mixed|null
+     * @return string|null
      */
     private function getHeader(array $headers, $key)
     {
@@ -175,6 +179,8 @@ class MultipartStreamBuilder
     }
 
     /**
+     * Get the boundary that separates the streams.
+     *
      * @return string
      */
     public function getBoundary()
