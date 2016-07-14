@@ -57,7 +57,7 @@ class MultipartStreamBuilder
     public function addResource($name, $resource, array $options)
     {
         $stream = $this->streamFactory->createStream($resource);
-        
+
         // validate options['headers'] exists
         if (!isset($options['headers'])) {
             $options['headers'] = [];
@@ -70,8 +70,10 @@ class MultipartStreamBuilder
             if (substr($uri, 0, 6) !== 'php://') {
                 $config['filename'] = $uri;
             }
+
         }
 
+        $this->prepareHeaders($name, $stream, $options['filename'], $options['headers']);
         $this->data[$name] = ['contents' => $stream, 'headers' => $options['headers'], 'filename' => $options['filename']];
         
         return $this;
@@ -87,22 +89,20 @@ class MultipartStreamBuilder
     {
         $streams = [];
         foreach ($this->data as $name => $data) {
-            $this->prepareHeaders($name, $data['contents'], $data['filename'], $data['headers']);
-            
-            // Add start and headers
-            $streams[] = $this->streamFactory->createStream(
-                "--{$this->getBoundary()}\r\n".
-                $this->getHeaders($data['headers'])."\r\n\r\n"
-            );
 
-            $streams[] = $data['contents'];
-            $streams[] .= $this->streamFactory->createStream("\r\n");
+            // Add start and headers
+            $streams[] = "--{$this->getBoundary()}\r\n".
+                $this->getHeaders($data['headers'])."\r\n\r\n";
+
+            // Convert the stream to string
+            $streams[] = (string) $data['contents'];
+            $streams[] .= "\r\n";
         }
 
-        // append end
-        $streams[] = $this->streamFactory->createStream("--{$this->getBoundary()}--\r\n");
+        // Append end
+        $streams[] = "--{$this->getBoundary()}--\r\n";
 
-        return new MultipartStream($streams, $this->getBoundary());
+        return $this->streamFactory->createStream(implode('', $streams));
     }
 
     /**
@@ -178,7 +178,7 @@ class MultipartStreamBuilder
     /**
      * @return string
      */
-    private function getBoundary()
+    public function getBoundary()
     {
         if ($this->boundary === null) {
             $this->boundary = uniqid();
