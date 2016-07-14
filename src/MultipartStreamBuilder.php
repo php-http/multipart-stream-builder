@@ -54,7 +54,7 @@ class MultipartStreamBuilder
      * 
      * @return MultipartStreamBuilder
      */
-    public function addResource($name, $resource, array $options)
+    public function addResource($name, $resource, array $options = [])
     {
         $stream = $this->streamFactory->createStream($resource);
 
@@ -68,7 +68,7 @@ class MultipartStreamBuilder
             $options['filename'] = null;
             $uri = $stream->getMetadata('uri');
             if (substr($uri, 0, 6) !== 'php://') {
-                $config['filename'] = $uri;
+                $options['filename'] = $uri;
             }
 
         }
@@ -91,7 +91,7 @@ class MultipartStreamBuilder
 
             // Add start and headers
             $streams .= "--{$this->getBoundary()}\r\n".
-                $this->getHeaders($data['headers'])."\r\n\r\n";
+                $this->getHeaders($data['headers'])."\r\n";
 
             // Convert the stream to string
             $streams .= (string) $data['contents'];
@@ -99,7 +99,7 @@ class MultipartStreamBuilder
         }
 
         // Append end
-        $streams[] = "--{$this->getBoundary()}--\r\n";
+        $streams .= "--{$this->getBoundary()}--\r\n";
 
         return $this->streamFactory->createStream($streams);
     }
