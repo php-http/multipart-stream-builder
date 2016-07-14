@@ -28,7 +28,7 @@ class MultipartStreamBuilder
     private $boundary;
 
     /**
-     * @var array array Element where each Element is an array with keys ['contents', 'headers', 'filename']
+     * @var array Element where each Element is an array with keys ['contents', 'headers', 'filename']
      */
     private $data;
 
@@ -83,26 +83,25 @@ class MultipartStreamBuilder
      * Build the stream.
      *
      * @return StreamInterface
-     * @throws \Exception
      */
     public function build()
     {
-        $streams = [];
-        foreach ($this->data as $name => $data) {
+        $streams = '';
+        foreach ($this->data as $data) {
 
             // Add start and headers
-            $streams[] = "--{$this->getBoundary()}\r\n".
+            $streams .= "--{$this->getBoundary()}\r\n".
                 $this->getHeaders($data['headers'])."\r\n\r\n";
 
             // Convert the stream to string
-            $streams[] = (string) $data['contents'];
-            $streams[] .= "\r\n";
+            $streams .= (string) $data['contents'];
+            $streams .= "\r\n";
         }
 
         // Append end
         $streams[] = "--{$this->getBoundary()}--\r\n";
 
-        return $this->streamFactory->createStream(implode('', $streams));
+        return $this->streamFactory->createStream($streams);
     }
 
     /**
