@@ -1,6 +1,6 @@
 <?php
 
-namespace Http\Message;
+namespace Http\Message\MultipartStream;
 
 use GuzzleHttp\Psr7\AppendStream;
 use Http\Discovery\StreamFactoryDiscovery;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Http\Message;
+namespace Http\Message\MultipartStream;
 
 /**
  * This class helps to find the proper mime types. The source of this file is taken

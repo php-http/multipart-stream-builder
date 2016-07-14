@@ -1,8 +1,8 @@
 <?php
 
-namespace tests\Http\Message;
+namespace tests\Http\Message\MultipartStream;
 
-use Http\Message\MultipartStreamBuilder;
+use Http\Message\MultipartStream\MultipartStreamBuilder;
 use Zend\Diactoros\Stream;
 
 /**

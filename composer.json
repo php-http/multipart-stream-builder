@@ -23,12 +23,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Http\\Message\\": "src/"
+            "Http\\Message\\MultipartStream\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "tests\\Http\\Message\\": "tests/"
+            "tests\\Http\\Message\\MultipartStream\\": "tests/"
         }
     },
     "scripts": {
