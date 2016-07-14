@@ -8,7 +8,7 @@ use Psr\Http\Message\StreamInterface;
  * @author Michael Dowling and contributors to guzzlehttp/psr7
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
-class MultipartStream implements StreamInterface
+class MultipartStream implements MultipartStreamInterface
 {
     /**
      * @var StreamInterface[] Streams being decorated
@@ -41,7 +41,8 @@ class MultipartStream implements StreamInterface
     private $boundary;
 
     /**
-     * @param StreamInterface[] $streams Streams to decorate. Each stream must be readable.
+     * @param StreamInterface[] $streams Streams to decorate. Each stream must be readable. The streams should also
+     *                          include the boundary.
      * @param string $boundary
      */
     public function __construct(array $streams = [], $boundary)
@@ -63,13 +64,13 @@ class MultipartStream implements StreamInterface
     }
 
     /**
-     * Add a stream to the AppendStream
+     * Add a stream to the MultipartStream
      *
      * @param StreamInterface $stream Stream to append. Must be readable.
      *
      * @throws \InvalidArgumentException if the stream is not readable
      */
-    public function addStream(StreamInterface $stream)
+    private function addStream(StreamInterface $stream)
     {
         if (!$stream->isReadable()) {
             throw new \InvalidArgumentException('Each stream must be readable');
@@ -83,9 +84,31 @@ class MultipartStream implements StreamInterface
         $this->streams[] = $stream;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getBoundary()
+    {
+        return $this->boundary;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getContents()
     {
-        return copy_to_string($this);
+        $buffer = '';
+
+        while (!$this->eof()) {
+            $buf = $this->read(1048576);
+            // Using a loose equality here to match on '' and false.
+            if ($buf == null) {
+                break;
+            }
+            $buffer .= $buf;
+        }
+
+        return $buffer;
     }
 
     /**
