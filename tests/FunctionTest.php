@@ -5,7 +5,10 @@ namespace tests\Http\Message;
 use Http\Message\MultipartStreamBuilder;
 use Zend\Diactoros\Stream;
 
-class FunctionalTest extends \PHPUnit_Framework_TestCase
+/**
+ * @author Tobias Nyholm <tobias.nyholm@gmail.com>
+ */
+class FunctionTest extends \PHPUnit_Framework_TestCase
 {
     public function testSupportStreams()
     {
@@ -33,7 +36,7 @@ class FunctionalTest extends \PHPUnit_Framework_TestCase
     public function testHeaders()
     {
         $builder = new MultipartStreamBuilder();
-        $builder->addResource('foobar', 'stream contents', ['headers' => ['Content-Type' => 'html/image', 'content-length'=>'4711', 'CONTENT-DISPOSITION'=>'none']]);
+        $builder->addResource('foobar', 'stream contents', ['headers' => ['Content-Type' => 'html/image', 'content-length' => '4711', 'CONTENT-DISPOSITION' => 'none']]);
 
         $multipartStream = (string) $builder->build();
         $this->assertTrue(false !== strpos($multipartStream, 'Content-Type: html/image'));
@@ -72,7 +75,6 @@ class FunctionalTest extends \PHPUnit_Framework_TestCase
         $multipartStream = (string) $builder->build();
         $this->assertEquals(2, substr_count($multipartStream, $boundary));
 
-
         $builder->addResource('content1', 'string');
         $builder->addResource('content2', 'string');
         $builder->addResource('content3', 'string');
@@ -82,7 +84,7 @@ class FunctionalTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $body
+     * @param string $body
      *
      * @return Stream
      */
