@@ -14,7 +14,7 @@ class MimetypeHelper
     /**
      * Determines the mimetype of a file by looking at its extension.
      *
-     * @param $filename
+     * @param string $filename
      *
      * @return null|string
      */
@@ -26,9 +26,10 @@ class MimetypeHelper
     /**
      * Maps a file extensions to a mimetype.
      *
-     * @param $extension string The file extension.
+     * @param string $extension The file extension.
      *
      * @return string|null
+     *
      * @link http://svn.apache.org/repos/asf/httpd/httpd/branches/1.3.x/conf/mime.types
      */
     public static function getMimetypeFromExtension($extension)

@@ -2,11 +2,9 @@
 
 namespace Http\Message\MultipartStream;
 
-use GuzzleHttp\Psr7\AppendStream;
 use Http\Discovery\StreamFactoryDiscovery;
 use Http\Message\StreamFactory;
 use Psr\Http\Message\StreamInterface;
-use Zend\Diactoros\CallbackStream;
 
 /**
  * Build your own Multipart stream. A Multipart stream is a collection of streams separated with a $bounary. This
@@ -44,9 +42,9 @@ class MultipartStreamBuilder
      * Add a resource to the Multipart Stream. If the same $name is used twice the first resource will
      * be overwritten.
      *
-     * @param string $name the formpost name
+     * @param string                          $name     the formpost name
      * @param string|resource|StreamInterface $resource
-     * @param array $options         {
+     * @param array                           $options  {
      *
      *     @var array $headers additional headers ['header-name' => 'header-value']
      *     @var string $filename
@@ -70,12 +68,11 @@ class MultipartStreamBuilder
             if (substr($uri, 0, 6) !== 'php://') {
                 $options['filename'] = $uri;
             }
-
         }
 
         $this->prepareHeaders($name, $stream, $options['filename'], $options['headers']);
         $this->data[$name] = ['contents' => $stream, 'headers' => $options['headers'], 'filename' => $options['filename']];
-        
+
         return $this;
     }
 
@@ -105,36 +102,34 @@ class MultipartStreamBuilder
     }
 
     /**
-     * Add extra headers if they are missing
+     * Add extra headers if they are missing.
      *
-     * @param string $name
+     * @param string          $name
      * @param StreamInterface $stream
-     * @param string $filename
-     * @param array &$headers
+     * @param string          $filename
+     * @param array           &$headers
      */
     private function prepareHeaders($name, StreamInterface $stream, $filename, array &$headers)
     {
-        // Set a default content-disposition header if one was no provided
-        $disposition = $this->getHeader($headers, 'content-disposition');
-        if (!$disposition) {
-            $headers['Content-Disposition'] = ($filename === '0' || $filename)
-                ? sprintf('form-data; name="%s"; filename="%s"',
-                    $name,
-                    basename($filename))
-                : "form-data; name=\"{$name}\"";
+        $hasFilename = $filename === '0' || $filename;
+
+        // Set a default content-disposition header if one was not provided
+        if (!$this->hasHeader($headers, 'content-disposition')) {
+            $headers['Content-Disposition'] = sprintf('form-data; name="%s"', $name);
+            if ($hasFilename) {
+                $headers['Content-Disposition'] .= sprintf('; filename="%s"', basename($filename));
+            }
         }
 
-        // Set a default content-length header if one was no provided
-        $length = $this->getHeader($headers, 'content-length');
-        if (!$length) {
+        // Set a default content-length header if one was not provided
+        if (!$this->hasHeader($headers, 'content-length')) {
             if ($length = $stream->getSize()) {
                 $headers['Content-Length'] = (string) $length;
             }
         }
 
-        // Set a default Content-Type if one was not supplied
-        $type = $this->getHeader($headers, 'content-type');
-        if (!$type && ($filename === '0' || $filename)) {
+        // Set a default Content-Type if one was not provided
+        if (!$this->hasHeader($headers, 'content-type') && $hasFilename) {
             if ($type = MimetypeHelper::getMimetypeFromFilename($filename)) {
                 $headers['Content-Type'] = $type;
             }
@@ -152,30 +147,30 @@ class MultipartStreamBuilder
     {
         $str = '';
         foreach ($headers as $key => $value) {
-            $str .= "{$key}: {$value}\r\n";
+            $str .= sprintf("%s: %s\r\n", $key, $value);
         }
 
         return $str;
     }
 
     /**
-     * Get one header by its name.
+     * Check if header exist.
      *
-     * @param array $headers
-     * @param string $key case insensitive
+     * @param array  $headers
+     * @param string $key     case insensitive
      *
-     * @return string|null
+     * @return bool
      */
-    private function getHeader(array $headers, $key)
+    private function hasHeader(array $headers, $key)
     {
         $lowercaseHeader = strtolower($key);
         foreach ($headers as $k => $v) {
             if (strtolower($k) === $lowercaseHeader) {
-                return $v;
+                return true;
             }
         }
 
-        return;
+        return false;
     }
 
     /**
