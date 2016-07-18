@@ -1,6 +1,6 @@
 <?php
-namespace Http\Message\MultipartStream;
 
+namespace Http\Message\MultipartStream;
 
 /**
  * This class helps to find the proper mime types. The source of this file is taken
@@ -23,7 +23,7 @@ interface MimetypeHelper
     /**
      * Maps a file extensions to a mimetype.
      *
-     * @param string $extension The file extension.
+     * @param string $extension The file extension
      *
      * @return string|null
      */

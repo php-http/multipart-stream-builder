@@ -54,7 +54,7 @@ class MultipartStreamBuilder
      *     @var array $headers additional headers ['header-name' => 'header-value']
      *     @var string $filename
      * }
-     * 
+     *
      * @return MultipartStreamBuilder
      */
     public function addResource($name, $resource, array $options = [])
