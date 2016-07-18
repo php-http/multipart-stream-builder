@@ -3,10 +3,6 @@
 namespace Http\Message\MultipartStream;
 
 /**
- * This class helps to find the proper mime types. The source of this file is taken
- * from Guzzle.
- *
- * @author Michael Dowling and contributors to guzzlehttp/psr7
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
 interface MimetypeHelper
