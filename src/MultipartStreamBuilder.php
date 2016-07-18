@@ -21,6 +21,11 @@ class MultipartStreamBuilder
     private $streamFactory;
 
     /**
+     * @var MimetypeHelper
+     */
+    private $mimetypeHelper;
+
+    /**
      * @var string
      */
     private $boundary;
@@ -130,7 +135,7 @@ class MultipartStreamBuilder
 
         // Set a default Content-Type if one was not provided
         if (!$this->hasHeader($headers, 'content-type') && $hasFilename) {
-            if ($type = MimetypeHelper::getMimetypeFromFilename($filename)) {
+            if ($type = $this->getMimetypeHelper()->getMimetypeFromFilename($filename)) {
                 $headers['Content-Type'] = $type;
             }
         }
@@ -195,6 +200,30 @@ class MultipartStreamBuilder
     public function setBoundary($boundary)
     {
         $this->boundary = $boundary;
+
+        return $this;
+    }
+
+    /**
+     * @return MimetypeHelper
+     */
+    private function getMimetypeHelper()
+    {
+        if ($this->mimetypeHelper === null) {
+            $this->mimetypeHelper = new ApacheMimetypeHelper();
+        }
+
+        return $this->mimetypeHelper;
+    }
+
+    /**
+     * @param MimetypeHelper $mimetypeHelper
+     *
+     * @return MultipartStreamBuilder
+     */
+    public function setMimetypeHelper($mimetypeHelper)
+    {
+        $this->mimetypeHelper = $mimetypeHelper;
 
         return $this;
     }
