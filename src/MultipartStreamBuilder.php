@@ -221,7 +221,7 @@ class MultipartStreamBuilder
      *
      * @return MultipartStreamBuilder
      */
-    public function setMimetypeHelper($mimetypeHelper)
+    public function setMimetypeHelper(MimetypeHelper $mimetypeHelper)
     {
         $this->mimetypeHelper = $mimetypeHelper;
 
