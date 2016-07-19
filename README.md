@@ -15,30 +15,9 @@ Via Composer
 $ composer require php-http/multipart-stream-builder
 ```
 
-## Usage
-
-```php
-$builder = new MultipartStreamBuilder();
-$builder
-  ->addResource('foo', $stream)
-  ->addResource('bar', fopen($filePath, 'r'), ['filename' => 'bar.png'])
-  ->addResource('baz', 'string', ['headers' => ['Content-Type' => 'text/plain']]);
-
-$multipartStream = $builder->build();
-$boundary = $builder->getBoundary();
-
-$request = MessageFactoryDiscovery::find()->createRequest(
-  'POST',
-  'http://example.com',
-  ['Content-Type' => 'multipart/form-data; boundary='.$boundary],
-  $multipartStream
-);
-$response = HttpClientDiscovery::find()->sendRequest($request);
-```
-
 ## Documentation
 
-Please see the [official documentation](http://php-http.readthedocs.org/en/latest/multipart-stream-builder/).
+Please see the [official documentation](http://php-http.readthedocs.org/en/latest/components/multipart-stream-builder.html).
 
 
 ## Contributing
