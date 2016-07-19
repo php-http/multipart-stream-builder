@@ -217,6 +217,8 @@ class MultipartStreamBuilder
     }
 
     /**
+     * If you have custom file extension you may overwrite the default MimetypeHelper with your own.
+     *
      * @param MimetypeHelper $mimetypeHelper
      *
      * @return MultipartStreamBuilder
