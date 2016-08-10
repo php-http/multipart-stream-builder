@@ -91,6 +91,7 @@ class ApacheMimetypeHelper implements MimetypeHelper
             'pbm' => 'image/x-portable-bitmap',
             'pdf' => 'application/pdf',
             'pgm' => 'image/x-portable-graymap',
+            'pkpass' => 'application/vnd.apple.pkpass',
             'png' => 'image/png',
             'pnm' => 'image/x-portable-anymap',
             'ppm' => 'image/x-portable-pixmap',
