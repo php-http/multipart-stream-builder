@@ -128,6 +128,7 @@ class ApacheMimetypeHelper implements MimetypeHelper
             'yaml' => 'text/yaml',
             'yml' => 'text/yaml',
             'zip' => 'application/zip',
+            'msg' => 'application/vnd.ms-outlook',
         ];
 
         $extension = strtolower($extension);
