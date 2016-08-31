@@ -91,7 +91,6 @@ class ApacheMimetypeHelper implements MimetypeHelper
             'pbm' => 'image/x-portable-bitmap',
             'pdf' => 'application/pdf',
             'pgm' => 'image/x-portable-graymap',
-            'pkpass' => 'application/vnd.apple.pkpass',
             'png' => 'image/png',
             'pnm' => 'image/x-portable-anymap',
             'ppm' => 'image/x-portable-pixmap',
@@ -128,6 +127,9 @@ class ApacheMimetypeHelper implements MimetypeHelper
             'yaml' => 'text/yaml',
             'yml' => 'text/yaml',
             'zip' => 'application/zip',
+            
+            // Non-Apache standard
+            'pkpass' => 'application/vnd.apple.pkpass',
             'msg' => 'application/vnd.ms-outlook',
         ];
 
