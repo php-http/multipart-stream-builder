@@ -127,7 +127,7 @@ class ApacheMimetypeHelper implements MimetypeHelper
             'yaml' => 'text/yaml',
             'yml' => 'text/yaml',
             'zip' => 'application/zip',
-            
+
             // Non-Apache standard
             'pkpass' => 'application/vnd.apple.pkpass',
             'msg' => 'application/vnd.ms-outlook',
