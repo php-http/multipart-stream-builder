@@ -33,7 +33,7 @@ class MultipartStreamBuilder
     /**
      * @var array Element where each Element is an array with keys ['contents', 'headers', 'filename']
      */
-    private $data;
+    private $data = [];
 
     /**
      * @param StreamFactory|null $streamFactory
