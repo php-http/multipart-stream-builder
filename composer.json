@@ -2,7 +2,7 @@
     "name": "php-http/multipart-stream-builder",
     "description": "A builder class that help you create a multipart stream",
     "license": "MIT",
-    "keywords": ["http", "factory", "message", "stream"],
+    "keywords": ["http", "factory", "message", "stream", "multipart stream"],
     "homepage": "http://php-http.org",
     "authors": [
         {
