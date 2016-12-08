@@ -4,7 +4,7 @@
 
 ### Added
 
-- Support for Outlog msg files. 
+- Support for Outlook msg files. 
 
 ## 0.1.1 - 2016-08-10
 
