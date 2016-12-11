@@ -3,7 +3,7 @@
 namespace Http\Message\MultipartStream;
 
 /**
- * Let you add your own mimetypes.
+ * Let you add your own mimetypes. The mimetype lookup will fallback on the ApacheMimeTypeHelper.
  *
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
@@ -15,7 +15,7 @@ class CustomMimetypeHelper extends ApacheMimetypeHelper
     private $mimetypes = [];
 
     /**
-     * @param array $mimetypes
+     * @param array $mimetypes should be of type extension => mimetype
      */
     public function __construct(array $mimetypes = [])
     {
