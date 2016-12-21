@@ -122,7 +122,7 @@ class MultipartStreamBuilder
         if (!$this->hasHeader($headers, 'content-disposition')) {
             $headers['Content-Disposition'] = sprintf('form-data; name="%s"', $name);
             if ($hasFilename) {
-                $headers['Content-Disposition'] .= sprintf('; filename="%s"', basename($filename));
+                $headers['Content-Disposition'] .= sprintf('; filename="%s"', pathinfo($filename, PATHINFO_BASENAME));
             }
         }
 
