@@ -29,7 +29,7 @@ install:
   - IF %PHP%==1 echo extension=php_mbstring.dll >> php.ini
   - IF %PHP%==1 echo extension=php_fileinfo.dll >> php.ini
   - appveyor DownloadFile https://getcomposer.org/composer.phar
-  - cd c:\projects\thephpleague\flysystem
+  - cd c:\projects\php-http\multipart-stream-builder
   - mkdir %APPDATA%\Composer
   - composer update --prefer-dist --no-progress --ansi
 
