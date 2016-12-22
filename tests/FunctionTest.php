@@ -43,6 +43,8 @@ class FunctionTest extends \PHPUnit_Framework_TestCase
         $builder->addResource('image', $resource, ['filename'=> 'äa.png']);
 
         $multipartStream = (string) $builder->build();
+        $this->assertTrue(0 < preg_match('|filename="([^"]*?)"|si', $multipartStream, $matches), 'Could not find any filename in output.');
+        $this->assertEquals('äa.png', $matches[1]);
         $this->assertTrue(false !== mb_strpos($multipartStream, 'Content-Disposition: form-data; name="image"; filename="äa.png"'));
         setlocale(LC_ALL, $originalLocale);
     }
