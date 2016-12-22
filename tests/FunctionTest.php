@@ -33,12 +33,20 @@ class FunctionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(false !== strpos($multipartStream, 'Content-Type: image/png'));
     }
 
-    public function testResourcesWithRussianNames()
+    public function testResourcesWithStrangeNames()
     {
-        $resource = fopen(__DIR__.'/Resources/хлопот.png', 'r');
+        $basePath = __DIR__.'/Resources/NonUtf8';
+        $files = scandir($basePath);
 
         $builder = new MultipartStreamBuilder();
-        $builder->addResource('image', $resource);
+        foreach ($files as $file) {
+            if (substr($file, 0, 1) === '.') {
+                continue;
+            }
+
+            $builder->addResource('image', fopen($basePath.'/'.$file, 'r'));
+        }
+
 
         $multipartStream = (string) $builder->build();
         $this->assertTrue(false !== strpos($multipartStream, 'Content-Disposition: form-data; name="image"; filename="хлопот.png"'));
