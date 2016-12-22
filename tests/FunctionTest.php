@@ -38,10 +38,10 @@ class FunctionTest extends \PHPUnit_Framework_TestCase
         $resource = fopen(__DIR__.'/Resources/httplug.png', 'r');
 
         $builder = new MultipartStreamBuilder();
-        $builder->addResource('image', $resource, ['filename'=>'foo/bar/хлопот.png']);
+        $builder->addResource('image', $resource, ['filename'=>'foo/bar/хлоäпот.png']);
 
         $multipartStream = (string) $builder->build();
-        $this->assertTrue(false !== strpos($multipartStream, 'Content-Disposition: form-data; name="image"; filename="хлопот.png"'));
+        $this->assertTrue(false !== strpos($multipartStream, 'Content-Disposition: form-data; name="image"; filename="хлоöпот.png"'));
     }
 
     public function testHeaders()
