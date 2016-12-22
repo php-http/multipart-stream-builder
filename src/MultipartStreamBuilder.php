@@ -121,7 +121,7 @@ class MultipartStreamBuilder
         if (!$this->hasHeader($headers, 'content-disposition')) {
             $headers['Content-Disposition'] = sprintf('form-data; name="%s"', $name);
             if ($hasFilename) {
-                $headers['Content-Disposition'] .= sprintf('; filename="%s"', pathinfo($filename, PATHINFO_BASENAME));
+                $headers['Content-Disposition'] .= sprintf('; filename="%s"', $this->basename($filename));
             }
         }
 
@@ -227,5 +227,32 @@ class MultipartStreamBuilder
         $this->mimetypeHelper = $mimetypeHelper;
 
         return $this;
+    }
+
+    /**
+     * Gets the filename from a given path.
+     *
+     * PHP's basename() does not properly support streams or filenames beginning with a non-US-ASCII character.
+     *
+     * @author Drupal 8.2
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    private function basename($path)
+    {
+        $separators = '/';
+        if (DIRECTORY_SEPARATOR != '/') {
+            // For Windows OS add special separator.
+            $separators .= DIRECTORY_SEPARATOR;
+        }
+        // Remove right-most slashes when $uri points to directory.
+        $path = rtrim($path, $separators);
+        // Returns the trailing part of the $uri starting after one of the directory
+        // separators.
+        $filename = preg_match('@[^'.preg_quote($separators, '@').']+$@', $path, $matches) ? $matches[0] : '';
+
+        return $filename;
     }
 }

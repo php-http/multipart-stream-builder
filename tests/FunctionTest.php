@@ -33,6 +33,26 @@ class FunctionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(false !== strpos($multipartStream, 'Content-Type: image/png'));
     }
 
+    public function testResourceFilenameIsNotLocaleAware()
+    {
+        // Get current locale
+        $originalLocale = setlocale(LC_ALL, "0");
+
+        // Set locale to something strange.
+        setlocale(LC_ALL, 'C');
+
+        $resource = fopen(__DIR__.'/Resources/httplug.png', 'r');
+        $builder = new MultipartStreamBuilder();
+        $builder->addResource('image', $resource, ['filename'=> 'äa.png']);
+
+        $multipartStream = (string) $builder->build();
+        $this->assertTrue(0 < preg_match('|filename="([^"]*?)"|si', $multipartStream, $matches), 'Could not find any filename in output.');
+        $this->assertEquals('äa.png', $matches[1]);
+
+        // Reset the locale
+        setlocale(LC_ALL, $originalLocale);
+    }
+
     public function testHeaders()
     {
         $builder = new MultipartStreamBuilder();
