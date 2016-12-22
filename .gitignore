@@ -1,4 +1,5 @@
 .puli/
+.idea
 build/
 vendor/
 composer.lock
