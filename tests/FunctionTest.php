@@ -35,13 +35,16 @@ class FunctionTest extends \PHPUnit_Framework_TestCase
 
     public function testResourcesWithStrangeNames()
     {
-        $resource = fopen(__DIR__.'/Resources/httplug.png', 'r');
+        $originalLocale = setlocale(LC_ALL, "0");
+        setlocale(LC_ALL, 'C');
 
+        $resource = fopen(__DIR__.'/Resources/httplug.png', 'r');
         $builder = new MultipartStreamBuilder();
-        $builder->addResource('image', $resource, ['filename'=>'foo/bar/хлопотäκόσμε.png']);
+        $builder->addResource('image', $resource, ['filename'=> 'äa.png']);
 
         $multipartStream = (string) $builder->build();
-        $this->assertTrue(false !== strpos($multipartStream, 'Content-Disposition: form-data; name="image"; filename="хлопотäκόσμε.png"'));
+        $this->assertTrue(false !== mb_strpos($multipartStream, 'Content-Disposition: form-data; name="image"; filename="äa.png"'));
+        setlocale(LC_ALL, $originalLocale);
     }
 
     public function testHeaders()
