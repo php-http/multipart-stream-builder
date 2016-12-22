@@ -8,7 +8,7 @@
 
 ### Changed
 
-- Using `pathinfo($filename, PATHINFO_BASENAME)` instead of `basename($filename)` because basename is depending on locale.
+- Using regular expression instead of `basename($filename)` because basename is depending on locale.
 
 ## 0.1.2 - 2016-08-31
 
