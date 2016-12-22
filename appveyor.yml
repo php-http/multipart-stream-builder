@@ -35,5 +35,5 @@ install:
 
 test_script:
   - cd c:\projects\php-http\multipart-stream-builder
-  - composer test
+  - bin\phpunit.bat --verbose
 
