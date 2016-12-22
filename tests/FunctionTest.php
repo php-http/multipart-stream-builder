@@ -35,8 +35,11 @@ class FunctionTest extends \PHPUnit_Framework_TestCase
 
     public function testResourcesWithStrangeNames()
     {
+        // Get current locale
         $originalLocale = setlocale(LC_ALL, "0");
-        setlocale(LC_ALL, 'C');
+
+        // Set locale to something strange.
+        //setlocale(LC_ALL, 'C');
 
         $resource = fopen(__DIR__.'/Resources/httplug.png', 'r');
         $builder = new MultipartStreamBuilder();
@@ -46,6 +49,8 @@ class FunctionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(0 < preg_match('|filename="([^"]*?)"|si', $multipartStream, $matches), 'Could not find any filename in output.');
         $this->assertEquals('äa.png', $matches[1]);
         $this->assertTrue(false !== mb_strpos($multipartStream, 'Content-Disposition: form-data; name="image"; filename="äa.png"'));
+
+        // Reset the locale
         setlocale(LC_ALL, $originalLocale);
     }
 
