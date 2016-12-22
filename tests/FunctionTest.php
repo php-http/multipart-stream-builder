@@ -35,18 +35,10 @@ class FunctionTest extends \PHPUnit_Framework_TestCase
 
     public function testResourcesWithStrangeNames()
     {
-        $basePath = __DIR__.'/Resources/NonUtf8';
-        $files = scandir($basePath);
+        $resource = fopen(__DIR__.'/Resources/httplug.png', 'r');
 
         $builder = new MultipartStreamBuilder();
-        foreach ($files as $file) {
-            if (substr($file, 0, 1) === '.') {
-                continue;
-            }
-
-            $builder->addResource('image', fopen($basePath.'/'.$file, 'r'));
-        }
-
+        $builder->addResource('image', $resource, ['filename'=>'foo/bar/хлопот.png']);
 
         $multipartStream = (string) $builder->build();
         $this->assertTrue(false !== strpos($multipartStream, 'Content-Disposition: form-data; name="image"; filename="хлопот.png"'));
