@@ -14,7 +14,7 @@ class ApacheMimetypeHelper implements MimetypeHelper
     /**
      * {@inheritdoc}
      *
-     * @link http://svn.apache.org/repos/asf/httpd/httpd/branches/1.3.x/conf/mime.types
+     * @see http://svn.apache.org/repos/asf/httpd/httpd/branches/1.3.x/conf/mime.types
      */
     public function getMimetypeFromFilename($filename)
     {
@@ -24,7 +24,7 @@ class ApacheMimetypeHelper implements MimetypeHelper
     /**
      * {@inheritdoc}
      *
-     * @link http://svn.apache.org/repos/asf/httpd/httpd/branches/1.3.x/conf/mime.types
+     * @see http://svn.apache.org/repos/asf/httpd/httpd/branches/1.3.x/conf/mime.types
      */
     public function getMimetypeFromExtension($extension)
     {
