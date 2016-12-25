@@ -103,6 +103,20 @@ class FunctionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(5, substr_count($multipartStream, $boundary));
     }
 
+    public function testReset()
+    {
+        $boundary = 'SpecialBoundary';
+        $builder = new MultipartStreamBuilder();
+        $builder->addResource('content0', 'foobar');
+        $builder->setBoundary($boundary);
+
+        $builder->reset();
+        $multipartStream = (string) $builder->build();
+        $this->assertNotContains('foobar', $multipartStream, 'Stream should not have any data after reset()');
+        $this->assertNotEquals($boundary, $builder->getBoundary(), 'Stream should have a new boundary after reset()');
+        $this->assertNotEmpty($builder->getBoundary());
+    }
+
     /**
      * @param string $body
      *

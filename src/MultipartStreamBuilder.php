@@ -230,6 +230,19 @@ class MultipartStreamBuilder
     }
 
     /**
+     * Reset and clear all stored data. This allows you to use builder for a subsequent request.
+     *
+     * @return MultipartStreamBuilder
+     */
+    public function reset()
+    {
+        $this->data = [];
+        $this->boundary = null;
+
+        return $this;
+    }
+
+    /**
      * Gets the filename from a given path.
      *
      * PHP's basename() does not properly support streams or filenames beginning with a non-US-ASCII character.
