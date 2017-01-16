@@ -35,17 +35,18 @@ class FunctionTest extends \PHPUnit_Framework_TestCase
 
     public function testSupportURIResources()
     {
+        $url = 'https://raw.githubusercontent.com/php-http/multipart-stream-builder/master/tests/Resources/httplug.png';
+        $resource = fopen($url, 'r');
+
         $builder = new MultipartStreamBuilder();
-        $resource = 'https://raw.githubusercontent.com/php-http/multipart-stream-builder/master/tests/Resources/httplug.png';
-        $stream = fopen($resource, 'r');
-        $builder->addResource('image', $stream);
+        $builder->addResource('image', $resource);
         $multipartStream = (string) $builder->build();
 
         $this->assertTrue(false !== strpos($multipartStream, 'Content-Disposition: form-data; name="image"; filename="httplug.png"'));
         $this->assertTrue(false !== strpos($multipartStream, 'Content-Type: image/png'));
 
-        $uriResourceContents = file_get_contents($resource);
-        $this->assertContains($uriResourceContents, $multipartStream);
+        $urlContents = file_get_contents($url);
+        $this->assertContains($urlContents, $multipartStream);
     }
 
     public function testResourceFilenameIsNotLocaleAware()
