@@ -3,7 +3,7 @@
 namespace tests\Http\Message\MultipartStream;
 
 use Http\Message\MultipartStream\MultipartStreamBuilder;
-
+use Zend\Diactoros\Stream;
 
 /**
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
@@ -15,7 +15,7 @@ class FunctionTest extends \PHPUnit_Framework_TestCase
         $body = 'stream contents';
 
         $builder = new MultipartStreamBuilder();
-        $builder->addResource('foobar', $body);
+        $builder->addResource('foobar', $this->createStream($body));
 
         $multipartStream = (string) $builder->build();
         $this->assertTrue(false !== strpos($multipartStream, $body));
@@ -130,5 +130,19 @@ class FunctionTest extends \PHPUnit_Framework_TestCase
         $this->assertNotContains('foobar', $multipartStream, 'Stream should not have any data after reset()');
         $this->assertNotEquals($boundary, $builder->getBoundary(), 'Stream should have a new boundary after reset()');
         $this->assertNotEmpty($builder->getBoundary());
+    }
+
+    /**
+     * @param string $body
+     *
+     * @return Stream
+     */
+    private function createStream($body)
+    {
+        $stream = new Stream('php://memory', 'rw');
+        $stream->write($body);
+        $stream->rewind();
+
+        return $stream;
     }
 }
