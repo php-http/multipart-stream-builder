@@ -95,7 +95,14 @@ class MultipartStreamBuilder
                 $this->getHeaders($data['headers'])."\r\n";
 
             // Convert the stream to string
-            $streams .= (string) $data['contents'];
+            /* @var $contentStream StreamInterface */
+            $contentStream = $data['contents'];
+            if ($contentStream->isSeekable()) {
+                $streams .= (string) $data['contents'];
+            } else {
+                $streams .= $contentStream->getContents();
+            }
+
             $streams .= "\r\n";
         }
 

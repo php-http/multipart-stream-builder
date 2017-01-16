@@ -3,7 +3,7 @@
 namespace tests\Http\Message\MultipartStream;
 
 use Http\Message\MultipartStream\MultipartStreamBuilder;
-use Zend\Diactoros\Stream;
+
 
 /**
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
@@ -15,7 +15,7 @@ class FunctionTest extends \PHPUnit_Framework_TestCase
         $body = 'stream contents';
 
         $builder = new MultipartStreamBuilder();
-        $builder->addResource('foobar', $this->createStream($body));
+        $builder->addResource('foobar', $body);
 
         $multipartStream = (string) $builder->build();
         $this->assertTrue(false !== strpos($multipartStream, $body));
@@ -31,6 +31,21 @@ class FunctionTest extends \PHPUnit_Framework_TestCase
         $multipartStream = (string) $builder->build();
         $this->assertTrue(false !== strpos($multipartStream, 'Content-Disposition: form-data; name="image"; filename="httplug.png"'));
         $this->assertTrue(false !== strpos($multipartStream, 'Content-Type: image/png'));
+    }
+
+    public function testSupportURIResources()
+    {
+        $builder = new MultipartStreamBuilder();
+        $resource = 'https://raw.githubusercontent.com/php-http/multipart-stream-builder/master/tests/Resources/httplug.png';
+        $stream = fopen($resource, 'r');
+        $builder->addResource('image', $stream);
+        $multipartStream = (string) $builder->build();
+
+        $this->assertTrue(false !== strpos($multipartStream, 'Content-Disposition: form-data; name="image"; filename="httplug.png"'));
+        $this->assertTrue(false !== strpos($multipartStream, 'Content-Type: image/png'));
+
+        $uriResourceContents = file_get_contents($resource);
+        $this->assertContains($uriResourceContents, $multipartStream);
     }
 
     public function testResourceFilenameIsNotLocaleAware()
@@ -115,19 +130,5 @@ class FunctionTest extends \PHPUnit_Framework_TestCase
         $this->assertNotContains('foobar', $multipartStream, 'Stream should not have any data after reset()');
         $this->assertNotEquals($boundary, $builder->getBoundary(), 'Stream should have a new boundary after reset()');
         $this->assertNotEmpty($builder->getBoundary());
-    }
-
-    /**
-     * @param string $body
-     *
-     * @return Stream
-     */
-    private function createStream($body)
-    {
-        $stream = new Stream('php://memory', 'rw');
-        $stream->write($body);
-        $stream->rewind();
-
-        return $stream;
     }
 }
