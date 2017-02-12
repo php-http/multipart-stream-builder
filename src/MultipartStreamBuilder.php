@@ -98,7 +98,7 @@ class MultipartStreamBuilder
             /* @var $contentStream StreamInterface */
             $contentStream = $data['contents'];
             if ($contentStream->isSeekable()) {
-                $streams .= (string) $data['contents'];
+                $streams .= $contentStream->__toString();
             } else {
                 $streams .= $contentStream->getContents();
             }
