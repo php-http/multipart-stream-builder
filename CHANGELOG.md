@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.1.5 - 2017-02-14
+
+### Fixed
+
+- Support for non-readable streams. This fix was needed because flaws in Guzzle, Zend and Slims implementations of PSR-7. 
+
+## 0.1.4 - 2016-12-31
+
+### Added
+
+- Added support for resetting the builder
+
 ## 0.1.3 - 2016-12-22
 
 ### Added

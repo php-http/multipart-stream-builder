@@ -12,7 +12,7 @@
     ],
     "require": {
         "php": "^5.5 || ^7.0",
-        "psr/http-message": "^1.0",
+        "psr/http-message": "^1.5",
         "php-http/message-factory": "^1.0.2",
         "php-http/discovery": "^1.0"
     },
