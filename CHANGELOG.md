@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.1.5 - 2017-02-16
+
+### Fixed
+
+- Performance improvements by avoid using `uniqid()`. 
+
 ## 0.1.5 - 2017-02-14
 
 ### Fixed
