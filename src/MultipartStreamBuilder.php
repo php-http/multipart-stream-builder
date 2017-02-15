@@ -91,7 +91,7 @@ class MultipartStreamBuilder
         $streams = '';
         foreach ($this->data as $data) {
             // Add start and headers
-            $streams .= "--\"{$this->getBoundary()}\"\r\n".
+            $streams .= "--{$this->getBoundary()}\r\n".
                 $this->getHeaders($data['headers'])."\r\n";
 
             // Convert the stream to string
@@ -107,7 +107,7 @@ class MultipartStreamBuilder
         }
 
         // Append end
-        $streams .= "--\"{$this->getBoundary()}\"--\r\n";
+        $streams .= "--{$this->getBoundary()}--\r\n";
 
         return $this->streamFactory->createStream($streams);
     }
