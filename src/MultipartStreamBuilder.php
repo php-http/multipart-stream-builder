@@ -76,7 +76,7 @@ class MultipartStreamBuilder
         }
 
         $this->prepareHeaders($name, $stream, $options['filename'], $options['headers']);
-        $this->data[$name] = ['contents' => $stream, 'headers' => $options['headers'], 'filename' => $options['filename']];
+        $this->data[] = ['contents' => $stream, 'headers' => $options['headers'], 'filename' => $options['filename']];
 
         return $this;
     }
