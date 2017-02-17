@@ -44,8 +44,7 @@ class MultipartStreamBuilder
     }
 
     /**
-     * Add a resource to the Multipart Stream. If the same $name is used twice the first resource will
-     * be overwritten.
+     * Add a resource to the Multipart Stream.
      *
      * @param string                          $name     the formpost name
      * @param string|resource|StreamInterface $resource
@@ -76,7 +75,7 @@ class MultipartStreamBuilder
         }
 
         $this->prepareHeaders($name, $stream, $options['filename'], $options['headers']);
-        $this->data[$name] = ['contents' => $stream, 'headers' => $options['headers'], 'filename' => $options['filename']];
+        $this->data[] = ['contents' => $stream, 'headers' => $options['headers'], 'filename' => $options['filename']];
 
         return $this;
     }

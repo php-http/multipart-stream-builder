@@ -1,10 +1,17 @@
 # Change Log
 
+## 0.2.0 - ???
+
+### Fixed
+
+- Make sure one can add resources with same name without overwrite. 
+
 ## 0.1.6 - 2017-02-16
 
 ### Fixed
 
 - Performance improvements by avoid using `uniqid()`. 
+- Make sure one can add resources with same name without overwrite. 
 
 ## 0.1.5 - 2017-02-14
 

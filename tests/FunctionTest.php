@@ -101,6 +101,17 @@ class FunctionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(false !== strpos($multipartStream, 'Content-Disposition: form-data; name="a-formname"'));
     }
 
+    public function testAddResourceWithSameName()
+    {
+        $builder = new MultipartStreamBuilder();
+        $builder->addResource('name', 'foo1234567890foo');
+        $builder->addResource('name', 'bar1234567890bar');
+
+        $multipartStream = (string) $builder->build();
+        $this->assertTrue(false !== strpos($multipartStream, 'bar1234567890bar'));
+        $this->assertTrue(false !== strpos($multipartStream, 'foo1234567890foo'), 'Using same name must not overwrite');
+    }
+
     public function testBoundary()
     {
         $boundary = 'SpecialBoundary';
