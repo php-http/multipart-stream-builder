@@ -1,6 +1,9 @@
 # Change Log
 
-## 0.2.0 - ???
+## 0.2.0 - 2017-02-20
+
+You may do a BC update to version 0.2.0 if you are sure that you are not adding
+multiple resources with the same name to the Builder. 
 
 ### Fixed
 
@@ -11,7 +14,6 @@
 ### Fixed
 
 - Performance improvements by avoid using `uniqid()`. 
-- Make sure one can add resources with same name without overwrite. 
 
 ## 0.1.5 - 2017-02-14
 
