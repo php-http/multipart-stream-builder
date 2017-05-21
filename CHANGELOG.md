@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.0.0 - 2017-05-21
+
+No changes from 0.2.0.
+
 ## 0.2.0 - 2017-02-20
 
 You may do a BC update to version 0.2.0 if you are sure that you are not adding
