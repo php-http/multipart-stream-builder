@@ -69,7 +69,7 @@ class MultipartStreamBuilder
         if (empty($options['filename'])) {
             $options['filename'] = null;
             $uri = $stream->getMetadata('uri');
-            if (substr($uri, 0, 6) !== 'php://') {
+            if ('php://' !== substr($uri, 0, 6)) {
                 $options['filename'] = $uri;
             }
         }
@@ -121,7 +121,7 @@ class MultipartStreamBuilder
      */
     private function prepareHeaders($name, StreamInterface $stream, $filename, array &$headers)
     {
-        $hasFilename = $filename === '0' || $filename;
+        $hasFilename = '0' === $filename || $filename;
 
         // Set a default content-disposition header if one was not provided
         if (!$this->hasHeader($headers, 'content-disposition')) {
@@ -190,7 +190,7 @@ class MultipartStreamBuilder
      */
     public function getBoundary()
     {
-        if ($this->boundary === null) {
+        if (null === $this->boundary) {
             $this->boundary = uniqid('', true);
         }
 
@@ -214,7 +214,7 @@ class MultipartStreamBuilder
      */
     private function getMimetypeHelper()
     {
-        if ($this->mimetypeHelper === null) {
+        if (null === $this->mimetypeHelper) {
             $this->mimetypeHelper = new ApacheMimetypeHelper();
         }
 
