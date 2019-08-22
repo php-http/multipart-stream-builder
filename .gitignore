@@ -1,6 +1,5 @@
 .puli/
-build/
 vendor/
 composer.lock
-phpspec.yml
 phpunit.xml
+.phpunit.result.cache
