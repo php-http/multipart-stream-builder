@@ -2,8 +2,12 @@
 
 namespace tests\Http\Message\MultipartStream;
 
+use Http\Message\MultipartStream\CustomMimetypeHelper;
 use Http\Message\MultipartStream\MultipartStreamBuilder;
-use Zend\Diactoros\Stream;
+use Nyholm\Psr7\Factory\HttplugFactory;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Nyholm\Psr7\Stream;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
@@ -144,15 +148,49 @@ class FunctionTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($builder->getBoundary());
     }
 
+    public function testThrowsExceptionIfNotStreamCompatible()
+    {
+        $builder = new MultipartStreamBuilder();
+        $this->expectException(\LogicException::class);
+        $builder->addResource('foo', []);
+    }
+
+    public function testThrowsExceptionInConstructor()
+    {
+        $this->expectException(\LogicException::class);
+        new MultipartStreamBuilder(new CustomMimetypeHelper());
+    }
+
+    /**
+     * @dataProvider getStreamFactories
+     */
+    public function testSupportDifferentFactories($factory)
+    {
+        $resource = fopen(__DIR__.'/Resources/httplug.png', 'r');
+
+        $builder = new MultipartStreamBuilder($factory);
+        $builder->addResource('image', $resource);
+
+        $multipartStream = (string) $builder->build();
+        $this->assertTrue(false !== strpos($multipartStream, 'Content-Disposition: form-data; name="image"; filename="httplug.png"'));
+        $this->assertTrue(false !== strpos($multipartStream, 'Content-Type: image/png'));
+    }
+
+    public function getStreamFactories()
+    {
+        yield 'Httplug Stream Factory' => [new HttplugFactory()];
+        yield 'PSR-17 Stream Factory' => [new Psr17Factory()];
+        yield 'Null Stream Factory' => [null];
+    }
+
     /**
      * @param string $body
      *
-     * @return Stream
+     * @return StreamInterface
      */
     private function createStream($body)
     {
-        $stream = new Stream('php://memory', 'rw');
-        $stream->write($body);
+        $stream = Stream::create($body);
         $stream->rewind();
 
         return $stream;
