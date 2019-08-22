@@ -3,8 +3,9 @@
 namespace tests\Http\Message\MultipartStream;
 
 use Http\Message\MultipartStream\CustomMimetypeHelper;
+use PHPUnit\Framework\TestCase;
 
-class CustomMimetypeHelperTest extends \PHPUnit_Framework_TestCase
+class CustomMimetypeHelperTest extends TestCase
 {
     public function testGetMimetypeFromExtension()
     {

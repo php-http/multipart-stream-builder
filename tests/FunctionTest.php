@@ -7,12 +7,13 @@ use Http\Message\MultipartStream\MultipartStreamBuilder;
 use Nyholm\Psr7\Factory\HttplugFactory;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Stream;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
 
 /**
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */
-class FunctionTest extends \PHPUnit_Framework_TestCase
+class FunctionTest extends TestCase
 {
     public function testSupportStreams()
     {
@@ -50,7 +51,7 @@ class FunctionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(false !== strpos($multipartStream, 'Content-Type: image/png'));
 
         $urlContents = file_get_contents($url);
-        $this->assertContains($urlContents, $multipartStream);
+        $this->assertStringContainsString($urlContents, $multipartStream);
     }
 
     public function testResourceFilenameIsNotLocaleAware()
@@ -143,7 +144,7 @@ class FunctionTest extends \PHPUnit_Framework_TestCase
 
         $builder->reset();
         $multipartStream = (string) $builder->build();
-        $this->assertNotContains('foobar', $multipartStream, 'Stream should not have any data after reset()');
+        $this->assertStringNotContainsString('foobar', $multipartStream, 'Stream should not have any data after reset()');
         $this->assertNotEquals($boundary, $builder->getBoundary(), 'Stream should have a new boundary after reset()');
         $this->assertNotEmpty($builder->getBoundary());
     }
