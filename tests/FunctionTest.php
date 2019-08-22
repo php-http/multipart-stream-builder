@@ -151,7 +151,7 @@ class FunctionTest extends \PHPUnit_Framework_TestCase
     public function testThrowsExceptionIfNotStreamCompatible()
     {
         $builder = new MultipartStreamBuilder();
-        $this->expectException(\LogicException::class);
+        $this->expectException(\InvalidArgumentException::class);
         $builder->addResource('foo', []);
     }
 
