@@ -48,7 +48,7 @@ class MultipartStreamBuilder
 
             return;
         }
-        
+
         if (null !== $streamFactory) {
             throw new \LogicException(sprintf(
                 'First arguemnt to the constructor of "%s" must be of type "%s", "%s" or null. Got %s',
@@ -307,6 +307,7 @@ class MultipartStreamBuilder
 
     /**
      * @param string|resource|StreamInterface $resource
+     *
      * @return StreamInterface
      */
     private function createStream($resource)
