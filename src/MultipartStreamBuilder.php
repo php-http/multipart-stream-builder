@@ -19,7 +19,7 @@ use Psr\Http\Message\StreamInterface;
 class MultipartStreamBuilder
 {
     /**
-     * @var StreamFactory|StreamFactoryInterface
+     * @var HttplugStreamFactory|StreamFactoryInterface
      */
     private $streamFactory;
 
@@ -39,7 +39,7 @@ class MultipartStreamBuilder
     private $data = [];
 
     /**
-     * @param StreamFactory|StreamFactoryInterface|null $streamFactory
+     * @param HttplugStreamFactory|StreamFactoryInterface|null $streamFactory
      */
     public function __construct($streamFactory = null)
     {
