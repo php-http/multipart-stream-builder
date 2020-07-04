@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.1.1 - 2020-07-04
+
+- Fixed mistake in PHPDoc type.
+
 ## 1.1.0 - 2019-08-22
 
 - Added support for PSR-17 factories.
