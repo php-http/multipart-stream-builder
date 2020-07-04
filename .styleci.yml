@@ -9,3 +9,6 @@ finder:
 
 enabled:
     - short_array_syntax
+
+disabled:
+    - single_line_throw
