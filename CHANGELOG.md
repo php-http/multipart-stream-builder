@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.1.2 - 2020-07-13
+
+- Support PHP 8.0
+
 ## 1.1.1 - 2020-07-04
 
 - Fixed mistake in PHPDoc type.
