@@ -73,6 +73,23 @@ class MultipartStreamBuilder
     }
 
     /**
+     * Add a resource to the Multipart Stream
+     *
+     * @param string|resource|\Psr\Http\Message\StreamInterface $resource
+     *     The filepath, resource or StreamInterface of the data.
+     * @param array $headers
+     *     Additional headers array: ['header-name' => 'header-value'].
+     *
+     * @return MultipartStreamBuilder
+     */
+    public function addData($resource, array $headers = [])
+    {
+        $stream = $this->createStream($resource);
+        $this->data[] = ['contents' => $stream, 'headers' => $headers];
+        return $this;
+    }
+
+    /**
      * Add a resource to the Multipart Stream.
      *
      * @param string                          $name     the formpost name
