@@ -12,7 +12,7 @@ interface MimetypeHelper
      *
      * @param string $filename
      *
-     * @return null|string
+     * @return string|null
      */
     public function getMimetypeFromFilename($filename);
 
