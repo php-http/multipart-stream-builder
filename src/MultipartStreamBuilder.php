@@ -143,10 +143,9 @@ class MultipartStreamBuilder
     /**
      * Add extra headers if they are missing.
      *
-     * @param string          $name
-     * @param StreamInterface $stream
-     * @param string          $filename
-     * @param array           &$headers
+     * @param string $name
+     * @param string $filename
+     * @param array  &$headers
      */
     private function prepareHeaders($name, StreamInterface $stream, $filename, array &$headers)
     {
@@ -178,8 +177,6 @@ class MultipartStreamBuilder
     /**
      * Get the headers formatted for the HTTP message.
      *
-     * @param array $headers
-     *
      * @return string
      */
     private function getHeaders(array $headers)
@@ -195,8 +192,7 @@ class MultipartStreamBuilder
     /**
      * Check if header exist.
      *
-     * @param array  $headers
-     * @param string $key     case insensitive
+     * @param string $key case insensitive
      *
      * @return bool
      */
@@ -252,8 +248,6 @@ class MultipartStreamBuilder
 
     /**
      * If you have custom file extension you may overwrite the default MimetypeHelper with your own.
-     *
-     * @param MimetypeHelper $mimetypeHelper
      *
      * @return MultipartStreamBuilder
      */
