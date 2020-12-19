@@ -7,8 +7,5 @@ finder:
     path:
         - "src"
 
-enabled:
-    - short_array_syntax
-
 disabled:
     - single_line_throw
