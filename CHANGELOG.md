@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.2.0 - (unreleased)
+
+- Refactored MultipartStreamBuilder to clean up and allow injecting data without a filename
+
 ## 1.1.2 - 2020-07-13
 
 - Support PHP 8.0
