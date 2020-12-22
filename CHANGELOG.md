@@ -3,6 +3,7 @@
 ## 1.2.0 - (unreleased)
 
 - Refactored MultipartStreamBuilder to clean up and allow injecting data without a filename
+- Dynamically use memory or temp file to buffer the stream content. Allow to stream content larger php memory limit.
 
 ## 1.1.2 - 2020-07-13
 
