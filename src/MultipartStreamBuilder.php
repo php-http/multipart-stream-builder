@@ -34,7 +34,7 @@ class MultipartStreamBuilder
     private $boundary;
 
     /**
-     * @var array Element where each Element is an array with keys ['contents', 'headers', 'filename']
+     * @var array Element where each Element is an array with keys ['contents', 'headers']
      */
     private $data = [];
 
@@ -121,8 +121,7 @@ class MultipartStreamBuilder
         }
 
         $this->prepareHeaders($name, $stream, $options['filename'], $options['headers']);
-        $this->data[] = ['contents' => $stream, 'headers' => $options['headers'], 'filename' => $options['filename']];
-
+        $this->addData($stream, $options['headers']);
         return $this;
     }
 
