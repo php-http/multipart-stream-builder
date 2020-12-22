@@ -133,28 +133,44 @@ class MultipartStreamBuilder
      */
     public function build()
     {
-        $streams = '';
+        // Open a temporary read-write stream as buffer.
+        // If the size is less than predefined limit, things will stay in memory.
+        // If the size is more than that, things will be stored in temp file.
+        $buffer = fopen('php://temp', 'r+');
         foreach ($this->data as $data) {
             // Add start and headers
-            $streams .= "--{$this->getBoundary()}\r\n".
-                $this->getHeaders($data['headers'])."\r\n";
+            fwrite($buffer, "--{$this->getBoundary()}\r\n".
+                $this->getHeaders($data['headers'])."\r\n");
 
-            // Convert the stream to string
-            /* @var $contentStream StreamInterface */
+            /**
+             * @var \Psr\Http\Message\StreamInterface
+             */
             $contentStream = $data['contents'];
-            if ($contentStream->isSeekable()) {
-                $streams .= $contentStream->__toString();
-            } else {
-                $streams .= $contentStream->getContents();
-            }
 
-            $streams .= "\r\n";
+            // Read stream into buffer
+            if ($contentStream->isSeekable()) {
+                $contentStream->rewind(); // rewind to beginning.
+            }
+            if ($contentStream->isReadable()) {
+                while (!$contentStream->eof()) {
+                    // read 8KB chunk into buffer until reached EOF.
+                    fwrite($buffer, $contentStream->read(8192));
+                }
+            } else {
+                // Try to getContents for non-readable stream.
+                // Less controllable chunk size (thus memory usage).
+                fwrite($buffer, $contentStream->getContents());
+            }
+            fwrite($buffer, "\r\n");
         }
 
         // Append end
-        $streams .= "--{$this->getBoundary()}--\r\n";
+        fwrite($buffer, "--{$this->getBoundary()}--\r\n");
 
-        return $this->createStream($streams);
+        // Rewind to starting position for reading.
+        fseek($buffer, 0);
+
+        return $this->createStream($buffer);
     }
 
     /**
