@@ -388,7 +388,9 @@ class MultipartStreamBuilder
     }
 
     /**
-     * Get and parse memory_limit into bytes integer.
+     * Estimate the available memory in the system by php.ini memory_limit
+     * and memory_get_usage(). If memory_limit is "-1", the default estimation
+     * would be 100MB.
      *
      * @throws \Exception if the ini format does not match expectation
      */
