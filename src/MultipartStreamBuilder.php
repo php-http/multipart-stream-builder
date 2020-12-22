@@ -40,8 +40,8 @@ class MultipartStreamBuilder
 
     /**
      * @var int Bytes of unallocated memory to use for stream buffer.
-     * To have MultipartStreamBuilder manage it automatically, set to -1.
-     * Default: -1
+     *          To have MultipartStreamBuilder manage it automatically, set to -1.
+     *          Default: -1
      */
     private $bufferMaxMemory = -1;
 
@@ -80,12 +80,10 @@ class MultipartStreamBuilder
     }
 
     /**
-     * Add a resource to the Multipart Stream
+     * Add a resource to the Multipart Stream.
      *
-     * @param string|resource|\Psr\Http\Message\StreamInterface $resource
-     *     The filepath, resource or StreamInterface of the data.
-     * @param array $headers
-     *     Additional headers array: ['header-name' => 'header-value'].
+     * @param string|resource|\Psr\Http\Message\StreamInterface $resource the filepath, resource or StreamInterface of the data
+     * @param array                                             $headers  additional headers array: ['header-name' => 'header-value']
      *
      * @return MultipartStreamBuilder
      */
@@ -151,7 +149,7 @@ class MultipartStreamBuilder
         // Open a temporary read-write stream as buffer.
         // If the size is less than predefined limit, things will stay in memory.
         // If the size is more than that, things will be stored in temp file.
-        $buffer = fopen('php://temp/maxmemory:' . $maxmemory, 'r+');
+        $buffer = fopen('php://temp/maxmemory:'.$maxmemory, 'r+');
         foreach ($this->data as $data) {
             // Add start and headers
             fwrite($buffer, "--{$this->getBoundary()}\r\n".
@@ -379,11 +377,8 @@ class MultipartStreamBuilder
      * in memory if the size of the stream is smaller than this size.
      * Otherwise, PHP will store the stream data in a temporary file.
      *
-     * @param integer $size
-     *     Size of stream data buffered (in bytes) until using temporary
-     *     file to buffer.
-     *
-     * @return MultipartStreamBuilder
+     * @param int $size size of stream data buffered (in bytes)
+     *                  until using temporary file to buffer
      */
     public function setBufferMaxMemory(int $size): MultipartStreamBuilder
     {
@@ -395,28 +390,26 @@ class MultipartStreamBuilder
     /**
      * Get and parse memory_limit into bytes integer.
      *
-     * @return integer
-     *
-     * @throws \Exception
-     *     If the ini format does not match expectation.
+     * @throws \Exception if the ini format does not match expectation
      */
     protected static function getAvailableMemory(): int
     {
         $memory_limit = ini_get('memory_limit');
-        if ($memory_limit === '-1') {
+        if ('-1' === $memory_limit) {
             // If there is no memory limit, return 100MB by default.
             return 100 * 1024 * 1024;
         }
         if (!preg_match('/^(\d+)(G|M|K|)$/', $memory_limit, $matches)) {
             throw new \Exception("Unknown memory_limit format: {$memory_limit}");
         }
-        if ($matches[2] == 'G') {
+        if ('G' === $matches[2]) {
             $memory_limit = $matches[1] * 1024 * 1024 * 1024; // nnnG -> nnn GB
-        } else if ($matches[2] == 'M') {
+        } elseif ('M' === $matches[2]) {
             $memory_limit = $matches[1] * 1024 * 1024; // nnnM -> nnn MB
-        } else if ($matches[2] == 'K') {
+        } elseif ('K' === $matches[2]) {
             $memory_limit = $matches[1] * 1024; // nnnK -> nnn KB
         }
+
         return (int) $memory_limit - \memory_get_usage();
     }
 }
