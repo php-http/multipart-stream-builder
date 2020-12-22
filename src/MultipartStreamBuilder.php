@@ -34,7 +34,7 @@ class MultipartStreamBuilder
     private $boundary;
 
     /**
-     * @var array Element where each Element is an array with keys ['contents', 'headers', 'filename']
+     * @var array Element where each Element is an array with keys ['contents', 'headers']
      */
     private $data = [];
 
@@ -73,6 +73,24 @@ class MultipartStreamBuilder
     }
 
     /**
+     * Add a resource to the Multipart Stream
+     *
+     * @param string|resource|\Psr\Http\Message\StreamInterface $resource
+     *     The filepath, resource or StreamInterface of the data.
+     * @param array $headers
+     *     Additional headers array: ['header-name' => 'header-value'].
+     *
+     * @return MultipartStreamBuilder
+     */
+    public function addData($resource, array $headers = [])
+    {
+        $stream = $this->createStream($resource);
+        $this->data[] = ['contents' => $stream, 'headers' => $headers];
+
+        return $this;
+    }
+
+    /**
      * Add a resource to the Multipart Stream.
      *
      * @param string                          $name     the formpost name
@@ -104,9 +122,8 @@ class MultipartStreamBuilder
         }
 
         $this->prepareHeaders($name, $stream, $options['filename'], $options['headers']);
-        $this->data[] = ['contents' => $stream, 'headers' => $options['headers'], 'filename' => $options['filename']];
 
-        return $this;
+        return $this->addData($stream, $options['headers']);
     }
 
     /**
