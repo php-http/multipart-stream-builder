@@ -140,9 +140,7 @@ class MultipartStreamBuilder
             fwrite($buffer, "--{$this->getBoundary()}\r\n".
                 $this->getHeaders($data['headers'])."\r\n");
 
-            /**
-             * @var \Psr\Http\Message\StreamInterface
-             */
+            /** @var $contentStream StreamInterface */
             $contentStream = $data['contents'];
 
             // Read stream into buffer
