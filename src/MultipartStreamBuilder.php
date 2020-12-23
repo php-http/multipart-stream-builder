@@ -149,13 +149,13 @@ class MultipartStreamBuilder
             }
             if ($contentStream->isReadable()) {
                 while (!$contentStream->eof()) {
-                    // read 1MB chunk into buffer until reached EOF.
+                    // Read 1MB chunk into buffer until reached EOF.
                     fwrite($buffer, $contentStream->read(1048576));
                 }
             } else {
-                // Try to getContents for non-readable stream.
-                // Less controllable chunk size (thus memory usage).
-                fwrite($buffer, $contentStream->getContents());
+                // If not isReadable, read from __toString().
+                // Warning: This could attempt to load a large amount of data into memory.
+                fwrite($buffer, $contentStream->__toString());
             }
             fwrite($buffer, "\r\n");
         }
