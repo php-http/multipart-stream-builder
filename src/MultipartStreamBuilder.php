@@ -73,12 +73,10 @@ class MultipartStreamBuilder
     }
 
     /**
-     * Add a resource to the Multipart Stream
+     * Add a resource to the Multipart Stream.
      *
-     * @param string|resource|\Psr\Http\Message\StreamInterface $resource
-     *     The filepath, resource or StreamInterface of the data.
-     * @param array $headers
-     *     Additional headers array: ['header-name' => 'header-value'].
+     * @param string|resource|\Psr\Http\Message\StreamInterface $resource the filepath, resource or StreamInterface of the data
+     * @param array                                             $headers  additional headers array: ['header-name' => 'header-value']
      *
      * @return MultipartStreamBuilder
      */
@@ -133,28 +131,40 @@ class MultipartStreamBuilder
      */
     public function build()
     {
-        $streams = '';
+        // Open a temporary read-write stream as buffer.
+        // If the size is less than predefined limit, things will stay in memory.
+        // If the size is more than that, things will be stored in temp file.
+        $buffer = fopen('php://temp', 'r+');
         foreach ($this->data as $data) {
             // Add start and headers
-            $streams .= "--{$this->getBoundary()}\r\n".
-                $this->getHeaders($data['headers'])."\r\n";
+            fwrite($buffer, "--{$this->getBoundary()}\r\n".
+                $this->getHeaders($data['headers'])."\r\n");
 
-            // Convert the stream to string
-            /* @var $contentStream StreamInterface */
+            /** @var $contentStream StreamInterface */
             $contentStream = $data['contents'];
-            if ($contentStream->isSeekable()) {
-                $streams .= $contentStream->__toString();
-            } else {
-                $streams .= $contentStream->getContents();
-            }
 
-            $streams .= "\r\n";
+            // Read stream into buffer
+            if ($contentStream->isSeekable()) {
+                $contentStream->rewind(); // rewind to beginning.
+            }
+            if ($contentStream->isReadable()) {
+                while (!$contentStream->eof()) {
+                    // Read 1MB chunk into buffer until reached EOF.
+                    fwrite($buffer, $contentStream->read(1048576));
+                }
+            } else {
+                fwrite($buffer, $contentStream->__toString());
+            }
+            fwrite($buffer, "\r\n");
         }
 
         // Append end
-        $streams .= "--{$this->getBoundary()}--\r\n";
+        fwrite($buffer, "--{$this->getBoundary()}--\r\n");
 
-        return $this->createStream($streams);
+        // Rewind to starting position for reading.
+        fseek($buffer, 0);
+
+        return $this->createStream($buffer);
     }
 
     /**

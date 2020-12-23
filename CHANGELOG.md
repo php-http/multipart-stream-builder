@@ -3,6 +3,7 @@
 ## 1.2.0 - (unreleased)
 
 - Refactored MultipartStreamBuilder to clean up and allow injecting data without a filename
+- Dynamically use memory or temp file to buffer the stream content.
 
 ## 1.1.2 - 2020-07-13
 
@@ -24,23 +25,23 @@ No changes from 0.2.0.
 ## 0.2.0 - 2017-02-20
 
 You may do a BC update to version 0.2.0 if you are sure that you are not adding
-multiple resources with the same name to the Builder. 
+multiple resources with the same name to the Builder.
 
 ### Fixed
 
-- Make sure one can add resources with same name without overwrite. 
+- Make sure one can add resources with same name without overwrite.
 
 ## 0.1.6 - 2017-02-16
 
 ### Fixed
 
-- Performance improvements by avoid using `uniqid()`. 
+- Performance improvements by avoid using `uniqid()`.
 
 ## 0.1.5 - 2017-02-14
 
 ### Fixed
 
-- Support for non-readable streams. This fix was needed because flaws in Guzzle, Zend and Slims implementations of PSR-7. 
+- Support for non-readable streams. This fix was needed because flaws in Guzzle, Zend and Slims implementations of PSR-7.
 
 ## 0.1.4 - 2016-12-31
 
@@ -52,7 +53,7 @@ multiple resources with the same name to the Builder.
 
 ### Added
 
-- Added `CustomMimetypeHelper` to allow you to configure custom mimetypes. 
+- Added `CustomMimetypeHelper` to allow you to configure custom mimetypes.
 
 ### Changed
 
@@ -62,13 +63,13 @@ multiple resources with the same name to the Builder.
 
 ### Added
 
-- Support for Outlook msg files. 
+- Support for Outlook msg files.
 
 ## 0.1.1 - 2016-08-10
 
 ### Added
 
-- Support for Apple passbook. 
+- Support for Apple passbook.
 
 ## 0.1.0 - 2016-07-19
 
