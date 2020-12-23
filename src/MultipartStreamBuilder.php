@@ -153,8 +153,6 @@ class MultipartStreamBuilder
                     fwrite($buffer, $contentStream->read(1048576));
                 }
             } else {
-                // If not isReadable, read from __toString().
-                // Warning: This could attempt to load a large amount of data into memory.
                 fwrite($buffer, $contentStream->__toString());
             }
             fwrite($buffer, "\r\n");
