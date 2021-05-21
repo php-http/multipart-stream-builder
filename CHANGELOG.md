@@ -1,6 +1,6 @@
 # Change Log
 
-## 1.2.0 - (unreleased)
+## 1.2.0 - 2021-05-21
 
 - Refactored MultipartStreamBuilder to clean up and allow injecting data without a filename
 - Dynamically use memory or temp file to buffer the stream content.
