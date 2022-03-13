@@ -114,7 +114,7 @@ class MultipartStreamBuilder
         if (empty($options['filename'])) {
             $options['filename'] = null;
             $uri = $stream->getMetadata('uri');
-            if ('php://' !== substr($uri, 0, 6)) {
+            if ('php://' !== substr($uri, 0, 6) && 'data://' !== substr($uri, 0, 7)) {
                 $options['filename'] = $uri;
             }
         }
