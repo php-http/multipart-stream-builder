@@ -72,11 +72,11 @@ please squash them before submitting with the following commands
 $ git rebase -i HEAD~3
 ```
 
-If your branch conflicts with the master branch, you will need to rebase and repush it with the following commands:
+If your branch conflicts with the target branch, you will need to rebase and repush it with the following commands:
 
 ``` bash
 $ git remote add upstream git@github.com:orga/repo-name.git
-$ git pull --rebase upstream master
+$ git pull --rebase upstream 1.x
 $ git push -f origin feature-or-bug-fix-description
 ```
 
