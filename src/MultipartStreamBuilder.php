@@ -172,7 +172,6 @@ class MultipartStreamBuilder
      *
      * @param string $name
      * @param string $filename
-     * @param array  &$headers
      */
     private function prepareHeaders($name, StreamInterface $stream, $filename, array &$headers)
     {
