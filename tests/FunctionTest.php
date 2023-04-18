@@ -40,7 +40,7 @@ class FunctionTest extends TestCase
 
     public function testSupportURIResources()
     {
-        $url = 'https://raw.githubusercontent.com/php-http/multipart-stream-builder/master/tests/Resources/httplug.png';
+        $url = 'https://raw.githubusercontent.com/php-http/multipart-stream-builder/1.x/tests/Resources/httplug.png';
         $resource = fopen($url, 'r');
 
         $builder = new MultipartStreamBuilder();
