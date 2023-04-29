@@ -3,6 +3,8 @@
 ## 1.3.0 - 2023-04-28
 
 - Removed unnecessary dependency on deprecated `php-http/message-factory`
+- Allow `psr/http-message` 2.*
+- Also skip setting filename if URI starts with `data://`
 
 ## 1.2.0 - 2021-05-21
 
