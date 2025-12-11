@@ -7,6 +7,7 @@ use Http\Message\MultipartStream\MultipartStreamBuilder;
 use Nyholm\Psr7\Factory\HttplugFactory;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Stream;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
 
@@ -168,6 +169,7 @@ class FunctionTest extends TestCase
     /**
      * @dataProvider getStreamFactories
      */
+    #[DataProvider('getStreamFactories')]
     public function testSupportDifferentFactories($factory)
     {
         $resource = fopen(__DIR__.'/Resources/httplug.png', 'r');
@@ -180,7 +182,7 @@ class FunctionTest extends TestCase
         $this->assertTrue(false !== strpos($multipartStream, 'Content-Type: image/png'));
     }
 
-    public function getStreamFactories()
+    public static function getStreamFactories()
     {
         yield 'Httplug Stream Factory' => [new HttplugFactory()];
         yield 'PSR-17 Stream Factory' => [new Psr17Factory()];

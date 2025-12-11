@@ -1,5 +1,10 @@
 # Change Log
 
+## 1.5.0 - unreleased
+
+- Test with newer PHP versions up to 8.5
+- Drop support for PHP < 7.4
+
 ## 1.4.2 - 2024-09-04
 
 - Fix phpdoc syntax.
